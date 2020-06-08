@@ -10,3 +10,27 @@ import PostsIndex from './components/PostsIndex';
 import PostsNew from './components/PostsNew'
 import PostsShow from './components/PostsShow'
 
+const finalCreateStore = compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
+)(createStore)
+
+const createStoreWithMiddleware = applyMiddleware(promise)(
+  finalCreateStore,
+)
+
+const store = createStoreWithMiddleware(reducers)
+
+ReactDOM.render(
+  <Provider store={store}>
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route path="/posts/new" component={PostsNew}></Route>
+          <Route path="/posts/:id" component={PostsShow}></Route>
+          <Route path="/" component={PostsIndex}></Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
+  </Provider>,
+  document.querySelector('.container'),
+)
